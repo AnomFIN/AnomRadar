@@ -18,15 +18,19 @@ AnomRadar is a comprehensive OSINT (Open Source Intelligence) security scanning 
 
 ## Features
 
-### Backend Scanner (Node.js + TypeScript)
-- **YTJ Integration**: Finnish Business Registry lookups
-- **Domain Discovery**: Automatic domain identification
-- **DNS Analysis**: DNS records and security checks
-- **Email Security**: SPF/DMARC/DKIM validation
-- **ZAP Passive Scanning**: OWASP ZAP integration (passive mode only)
-- **Network Scanning**: Nmap port and service discovery
-- **Contact Scraping**: Automated contact information collection
-- **Risk Scoring**: Algorithmic risk assessment (0-100 scale)
+### Backend Scanner (Node.js + TypeScript) - 12 Scanners
+1. **YTJ Integration**: Finnish Business Registry lookups
+2. **Domain Discovery**: Automatic domain identification
+3. **DNS Analysis**: DNS records and security checks
+4. **Email Security**: SPF/DMARC/DKIM validation
+5. **ZAP Passive Scanning**: OWASP ZAP integration (passive mode only)
+6. **Network Scanning**: Nmap port and service discovery
+7. **Contact Scraping**: Automated contact information collection
+8. **🆕 SSL/TLS Scanner**: Certificate validation, expiration, weak ciphers
+9. **🆕 WHOIS Scanner**: Domain registration, expiration, privacy checks
+10. **🆕 Social Media**: Presence detection on 7+ platforms
+11. **🆕 Technology Stack**: CMS, frameworks, security headers detection
+12. **Risk Scoring**: Algorithmic risk assessment (0-100 scale)
 
 ### PHP REST API
 - **MySQL 8.0 Database**: Persistent storage for scan results
@@ -60,9 +64,13 @@ AnomRadar (Monorepo)
 - PHP 8.1+
 - MySQL 8.0+
 - Composer
-- nmap, dig utilities
+- nmap, dig, whois utilities
 
-### Installation
+### Super Easy Installation
+
+**See [HOWTO.md](HOWTO.md) for detailed step-by-step guide with screenshots and troubleshooting!**
+
+**Quick Install (5 minutes):**
 
 1. **Clone the repository:**
    ```bash

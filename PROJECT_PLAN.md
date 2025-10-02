@@ -8,15 +8,19 @@ AnomRadar is a comprehensive OSINT (Open Source Intelligence) security scanning 
 ### 1. Backend Scanner (Node.js + TypeScript)
 **Purpose**: Passive OSINT scanning engine that collects security intelligence
 
-**Key Features**:
-- **YTJ (Finnish Business Registry) Search**: Initial company lookup and data gathering
-- **Domain Discovery**: Automated domain identification from company data
-- **DNS Analysis**: DNS record validation and security checks
-- **SPF/DMARC Checks**: Email security policy verification
-- **ZAP Passive Scanning**: OWASP ZAP passive security scanning (no active attacks)
-- **Nmap Scanning**: Network port and service discovery
-- **Contact Scraping**: Automated collection of contact information
-- **Risk Score Calculation**: Algorithmic risk assessment based on findings
+**Key Features - 12 Scanner Modules**:
+1. **YTJ (Finnish Business Registry) Search**: Initial company lookup and data gathering
+2. **Domain Discovery**: Automated domain identification from company data
+3. **DNS Analysis**: DNS record validation and security checks
+4. **SPF/DMARC Checks**: Email security policy verification
+5. **ZAP Passive Scanning**: OWASP ZAP passive security scanning (no active attacks)
+6. **Nmap Scanning**: Network port and service discovery
+7. **Contact Scraping**: Automated collection of contact information
+8. **🆕 SSL/TLS Certificate Scanner**: Certificate validity, expiration, weak cipher detection
+9. **🆕 WHOIS Scanner**: Domain registration info, expiration dates, privacy protection
+10. **🆕 Social Media Scanner**: Presence detection across 7+ platforms (LinkedIn, Twitter, Facebook, Instagram, YouTube, TikTok, GitHub)
+11. **🆕 Technology Stack Scanner**: Identifies 30+ technologies (WordPress, React, PHP, etc.), security headers, debug mode
+12. **Risk Score Calculation**: Algorithmic risk assessment based on findings
 
 **Technology Stack**:
 - Node.js 18+ (LTS)
