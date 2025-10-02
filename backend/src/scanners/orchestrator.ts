@@ -7,6 +7,10 @@ import { SPFDMARCScanner } from './spf-dmarc';
 import { ZAPScanner } from './zap';
 import { NmapScanner } from './nmap';
 import { ContactScraper } from './contact-scraper';
+import { SSLScanner } from './ssl';
+import { WHOISScanner } from './whois';
+import { SocialMediaScanner } from './social-media';
+import { TechStackScanner } from './tech-stack';
 import { RiskScorer } from '../risk-scoring/risk-scorer';
 
 export interface ScanResult {
@@ -41,6 +45,10 @@ export class ScannerOrchestrator {
   private zapScanner: ZAPScanner;
   private nmapScanner: NmapScanner;
   private contactScraper: ContactScraper;
+  private sslScanner: SSLScanner;
+  private whoisScanner: WHOISScanner;
+  private socialMediaScanner: SocialMediaScanner;
+  private techStackScanner: TechStackScanner;
   private riskScorer: RiskScorer;
 
   constructor(config: Config) {
@@ -52,11 +60,16 @@ export class ScannerOrchestrator {
     this.zapScanner = new ZAPScanner(config);
     this.nmapScanner = new NmapScanner(config);
     this.contactScraper = new ContactScraper(config);
+    this.sslScanner = new SSLScanner(config);
+    this.whoisScanner = new WHOISScanner(config);
+    this.socialMediaScanner = new SocialMediaScanner(config);
+    this.techStackScanner = new TechStackScanner(config);
     this.riskScorer = new RiskScorer(config);
   }
 
   async initialize(): Promise<void> {
     logger.info('Initializing scanner orchestrator...');
+    logger.info(`Configuration: Simulation Mode = ${this.config.simulationMode}`);
     // Initialize scanners if needed
     logger.info('✓ Scanner orchestrator initialized');
   }
@@ -129,8 +142,36 @@ export class ScannerOrchestrator {
         findings.push(...contactResult.findings);
       }
 
-      // Step 8: Risk Scoring
-      logger.info(`[${scanId}] Step 8: Risk scoring`);
+      // Step 8: SSL/TLS Certificate Check
+      logger.info(`[${scanId}] Step 8: SSL/TLS certificate check`);
+      for (const domain of domains) {
+        const sslResult = await this.sslScanner.scan(domain);
+        findings.push(...sslResult.findings);
+      }
+
+      // Step 9: WHOIS Lookup
+      logger.info(`[${scanId}] Step 9: WHOIS lookup`);
+      for (const domain of domains) {
+        const whoisResult = await this.whoisScanner.scan(domain);
+        findings.push(...whoisResult.findings);
+      }
+
+      // Step 10: Social Media Presence
+      logger.info(`[${scanId}] Step 10: Social media presence check`);
+      for (const domain of domains) {
+        const socialResult = await this.socialMediaScanner.scan(domain);
+        findings.push(...socialResult.findings);
+      }
+
+      // Step 11: Technology Stack Detection
+      logger.info(`[${scanId}] Step 11: Technology stack detection`);
+      for (const domain of domains) {
+        const techResult = await this.techStackScanner.scan(domain);
+        findings.push(...techResult.findings);
+      }
+
+      // Step 12: Risk Scoring
+      logger.info(`[${scanId}] Step 12: Risk scoring`);
       const riskScore = this.riskScorer.calculateScore(findings);
       const riskLevel = this.riskScorer.getRiskLevel(riskScore);
 
