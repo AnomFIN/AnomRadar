@@ -1,0 +1,92 @@
+{
+  "backend": {
+    "database": {
+      "host": "localhost",
+      "port": 3306,
+      "name": "anomradar",
+      "user": "anomradar",
+      "password": "CHANGE_THIS"
+    },
+    "ytj": {
+      "api_key": "YOUR_YTJ_API_KEY",
+      "api_url": "https://avoindata.prh.fi/bis/v1"
+    },
+    "zap": {
+      "api_key": "YOUR_ZAP_API_KEY",
+      "api_url": "http://localhost:8080"
+    },
+    "nmap": {
+      "path": "/usr/bin/nmap",
+      "options": "-sV -sC"
+    },
+    "scanner": {
+      "simulation_mode": false,
+      "scan_timeout": 300000,
+      "max_concurrent_scans": 3
+    },
+    "risk_scoring": {
+      "high_threshold": 70,
+      "medium_threshold": 40,
+      "low_threshold": 20
+    },
+    "notifications": {
+      "enabled": false,
+      "telegram": {
+        "bot_token": "YOUR_TELEGRAM_BOT_TOKEN",
+        "chat_ids": []
+      },
+      "whatsapp": {
+        "api_key": "YOUR_WHATSAPP_API_KEY",
+        "enabled": false
+      }
+    },
+    "logging": {
+      "level": "info",
+      "file": "/var/log/anomradar/backend.log"
+    }
+  },
+  "api": {
+    "database": {
+      "host": "localhost",
+      "port": 3306,
+      "name": "anomradar",
+      "user": "anomradar",
+      "password": "CHANGE_THIS",
+      "charset": "utf8mb4"
+    },
+    "data_retention_days": 90,
+    "reports": {
+      "output_path": "/var/www/anomradar/api/reports/generated",
+      "base_url": "https://anomradar.example.com/reports"
+    },
+    "notifications": {
+      "enabled": false,
+      "telegram": {
+        "bot_token": "YOUR_TELEGRAM_BOT_TOKEN",
+        "whitelist_chat_ids": []
+      },
+      "whatsapp": {
+        "api_key": "YOUR_WHATSAPP_API_KEY",
+        "whitelist_numbers": []
+      }
+    },
+    "security": {
+      "api_key": "GENERATE_SECURE_API_KEY",
+      "cors_allowed_origins": [
+        "http://localhost:3000",
+        "https://anomradar.example.com"
+      ]
+    },
+    "logging": {
+      "level": "info",
+      "file": "/var/log/anomradar/api.log"
+    },
+    "app": {
+      "env": "production",
+      "debug": false
+    }
+  },
+  "frontend": {
+    "api_url": "https://anomradar.example.com/api"
+  }
+}

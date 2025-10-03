@@ -1,0 +1,54 @@
+# Dependencies
+node_modules/
+vendor/
+composer.phar
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Build outputs
+backend/dist/
+*.log
+*.pid
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temp files
+tmp/
+temp/
+*.tmp
+
+# Reports (generated)
+api/reports/generated/*.pdf
+api/reports/generated/*.html
+
+# Database
+*.sql.gz
+*.sql.bak
+
+# Uploads
+uploads/
+*.upload
+
+# Testing
+coverage/
+.nyc_output/
+
+# Compiled files
+*.compiled
+
+# Secrets and keys
+*.key
+*.pem
+secrets.json

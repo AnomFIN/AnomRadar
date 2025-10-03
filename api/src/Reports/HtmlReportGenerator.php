@@ -1,0 +1,145 @@
+<?php
+
+declare(strict_types=1);
+
+namespace AnomRadar\Api\Reports;
+
+/**
+ * HTML Report Generator
+ */
+class HtmlReportGenerator
+{
+    public function generate(array $scan): string
+    {
+        $html = $this->getHeader($scan);
+        $html .= $this->getSummary($scan);
+        $html .= $this->getFindings($scan);
+        $html .= $this->getFooter();
+
+        return $html;
+    }
+
+    private function getHeader(array $scan): string
+    {
+        $title = htmlspecialchars($scan['company_name']);
+        $date = date('Y-m-d H:i:s', strtotime($scan['created_at']));
+
+        return <<<HTML
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Report - {$title}</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f5f5f5; }
+        .container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h1 { color: #333; border-bottom: 3px solid #007bff; padding-bottom: 10px; }
+        h2 { color: #555; margin-top: 30px; }
+        .summary { background: #f8f9fa; padding: 20px; border-radius: 5px; margin: 20px 0; }
+        .risk-high { color: #dc3545; font-weight: bold; }
+        .risk-medium { color: #fd7e14; font-weight: bold; }
+        .risk-low { color: #ffc107; font-weight: bold; }
+        .risk-info { color: #17a2b8; font-weight: bold; }
+        .finding { border: 1px solid #dee2e6; padding: 15px; margin: 10px 0; border-radius: 5px; }
+        .finding-critical { border-left: 4px solid #dc3545; }
+        .finding-high { border-left: 4px solid #fd7e14; }
+        .finding-medium { border-left: 4px solid #ffc107; }
+        .finding-low { border-left: 4px solid #28a745; }
+        .finding-info { border-left: 4px solid #17a2b8; }
+        .badge { display: inline-block; padding: 3px 8px; border-radius: 3px; font-size: 12px; font-weight: bold; color: white; }
+        .badge-critical { background: #dc3545; }
+        .badge-high { background: #fd7e14; }
+        .badge-medium { background: #ffc107; }
+        .badge-low { background: #28a745; }
+        .badge-info { background: #17a2b8; }
+        .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #dee2e6; color: #6c757d; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Security Scan Report</h1>
+        <p><strong>Company:</strong> {$title}</p>
+        <p><strong>Scan ID:</strong> {$scan['scan_id']}</p>
+        <p><strong>Date:</strong> {$date}</p>
+HTML;
+    }
+
+    private function getSummary(array $scan): string
+    {
+        $riskClass = 'risk-' . $scan['risk_level'];
+        $domains = implode(', ', $scan['domains'] ?: ['None']);
+        
+        $severityCounts = [
+            'critical' => 0,
+            'high' => 0,
+            'medium' => 0,
+            'low' => 0,
+            'info' => 0,
+        ];
+
+        foreach ($scan['findings'] as $finding) {
+            $severityCounts[$finding['severity']]++;
+        }
+
+        $totalFindings = count($scan['findings']);
+
+        return <<<HTML
+        <div class="summary">
+            <h2>Summary</h2>
+            <p><strong>Risk Score:</strong> <span class="{$riskClass}">{$scan['risk_score']}</span> / 100</p>
+            <p><strong>Risk Level:</strong> <span class="{$riskClass}">{$scan['risk_level']}</span></p>
+            <p><strong>Domains Scanned:</strong> {$domains}</p>
+            <p><strong>Total Findings:</strong> {$totalFindings}</p>
+            <ul>
+                <li>Critical: {$severityCounts['critical']}</li>
+                <li>High: {$severityCounts['high']}</li>
+                <li>Medium: {$severityCounts['medium']}</li>
+                <li>Low: {$severityCounts['low']}</li>
+                <li>Info: {$severityCounts['info']}</li>
+            </ul>
+        </div>
+HTML;
+    }
+
+    private function getFindings(array $scan): string
+    {
+        if (empty($scan['findings'])) {
+            return '<p>No findings to report.</p>';
+        }
+
+        $html = '<h2>Findings</h2>';
+
+        foreach ($scan['findings'] as $finding) {
+            $title = htmlspecialchars($finding['title']);
+            $description = htmlspecialchars($finding['description']);
+            $recommendation = htmlspecialchars($finding['recommendation'] ?? 'N/A');
+            $severity = $finding['severity'];
+
+            $html .= <<<HTML
+            <div class="finding finding-{$severity}">
+                <span class="badge badge-{$severity}">{$severity}</span>
+                <h3>{$title}</h3>
+                <p><strong>Description:</strong> {$description}</p>
+                <p><strong>Recommendation:</strong> {$recommendation}</p>
+            </div>
+HTML;
+        }
+
+        return $html;
+    }
+
+    private function getFooter(): string
+    {
+        $year = date('Y');
+        return <<<HTML
+        <div class="footer">
+            <p>Generated by AnomRadar Security Scanner - {$year}</p>
+            <p>This report is confidential and should only be shared with authorized personnel.</p>
+        </div>
+    </div>
+</body>
+</html>
+HTML;
+    }
+}
