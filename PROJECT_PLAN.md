@@ -77,7 +77,7 @@ Tavoite: Rakentaa **täysin automaattinen ja laajennettava järjestelmä**, joka
 
 ## 📡 Simulaatiot ja eettiset rajat
 
-- Oletuksena **OFF**: ei viestien lähetyksiä ennen kuin käyttäjä hyväksyy ne UI:ssa.
+- Oletuksena `simulation_enabled: false`: ei viestien lähetyksiä ennen kuin käyttäjä hyväksyy ne UI:ssa.
 - Viestit lähetetään vain **whitelistatuiksi merkityille kontakteille**.
 - Klikkilinkit ohjataan `https://test.anomfin.fi` -sandboxiin, joka kirjaa klikkaukset MySQL:ään.
 - Robots.txt noudatetaan aina.  
