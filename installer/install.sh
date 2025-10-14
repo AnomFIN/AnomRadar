@@ -29,14 +29,14 @@ echo ""
 # Install dependencies based on OS
 echo "Installing system dependencies..."
 case "$OS" in
-    ubuntu|debian)
+    ubuntu|debian|kali)
         apt-get update
         apt-get install -y nodejs npm php php-cli php-mysql php-json php-xml php-mbstring \
-            mysql-server composer curl git nmap dig tcpdump
+            mysql-server composer curl git nmap dnsutils tcpdump lftp
         ;;
     centos|rhel|fedora)
         yum install -y nodejs npm php php-cli php-mysqlnd php-json php-xml php-mbstring \
-            mysql-server composer curl git nmap bind-utils tcpdump
+            mysql-server composer curl git nmap bind-utils tcpdump lftp
         ;;
     *)
         echo "Unsupported OS: $OS"

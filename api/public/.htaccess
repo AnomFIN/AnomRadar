@@ -1,0 +1,38 @@
+# AnomRadar API .htaccess
+# Apache configuration for API routing
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Redirect all requests to index.php
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^ index.php [QSA,L]
+</IfModule>
+
+# Disable directory browsing
+Options -Indexes
+
+# Prevent access to .env files
+<FilesMatch "^\.env">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Set UTF-8 charset
+AddDefaultCharset UTF-8
+
+# Enable CORS (configured in PHP, but backup here)
+<IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+    Header set Access-Control-Allow-Headers "Content-Type, Authorization"
+</IfModule>
+
+# Increase PHP limits if possible
+<IfModule mod_php.c>
+    php_value memory_limit 256M
+    php_value max_execution_time 300
+    php_value upload_max_filesize 10M
+    php_value post_max_size 10M
+</IfModule>

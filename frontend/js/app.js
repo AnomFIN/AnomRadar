@@ -1,8 +1,23 @@
 // AnomRadar Frontend - Main Application
 
-const API_BASE_URL = window.location.hostname === 'localhost' 
-    ? 'http://localhost:8080/api' 
-    : '/api';
+// API Base URL configuration
+// Automatically detects environment and uses appropriate API endpoint
+const API_BASE_URL = (() => {
+    const hostname = window.location.hostname;
+    
+    // Development mode (localhost)
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+        return 'http://localhost:8080/api';
+    }
+    
+    // Production on anomfin.fi
+    if (hostname.includes('anomfin.fi')) {
+        return '/api/radar';
+    }
+    
+    // Default: relative path
+    return '/api';
+})();
 
 // Navigation
 document.addEventListener('DOMContentLoaded', () => {

@@ -59,7 +59,7 @@ AnomRadar (Monorepo)
 ## Quick Start
 
 ### Prerequisites
-- Linux-based system (Ubuntu/Debian recommended)
+- Linux-based system (**Ubuntu, Debian, Kali Linux, CentOS, RHEL, Fedora**)
 - Node.js 18+ (LTS)
 - PHP 8.1+
 - MySQL 8.0+
@@ -99,6 +99,37 @@ AnomRadar (Monorepo)
    ```
 
 For detailed installation instructions, see [installer/README.md](installer/README.md)
+
+## Deployment to anomfin.fi
+
+**AnomRadar can be deployed to your web server (anomfin.fi) via FTP with remote MySQL!**
+
+### FTP Deployment Features
+- 🌐 Deploy PHP API and Frontend to anomfin.fi
+- 🗄️ Connect to remote MySQL database
+- 📁 Automatic backup before deployment
+- 🔒 Secure FTP/FTPS support
+- 🚀 One-command deployment
+
+**Quick Deployment:**
+```bash
+# 1. Configure FTP credentials
+cd deployment
+cp .env.ftp.example .env.ftp
+nano .env.ftp
+
+# 2. Set up MySQL database (via cPanel or SSH)
+./setup-mysql.sh
+
+# 3. Deploy to anomfin.fi
+./deploy-ftp.sh
+```
+
+**After deployment:**
+- Frontend: https://anomfin.fi/radar-ui
+- API: https://anomfin.fi/api/radar
+
+For complete deployment guide, see **[DEPLOYMENT.md](DEPLOYMENT.md)**
 
 ## Configuration
 

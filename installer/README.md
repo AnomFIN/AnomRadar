@@ -6,7 +6,7 @@ This directory contains installation scripts and configuration templates for Ano
 ## Quick Installation
 
 ### Prerequisites
-- Linux-based system (Ubuntu/Debian or CentOS/RHEL/Fedora)
+- Linux-based system (**Ubuntu, Debian, Kali Linux, CentOS, RHEL, Fedora**)
 - Root access (sudo)
 - Internet connection
 
