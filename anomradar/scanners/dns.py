@@ -10,7 +10,7 @@ Scans DNS records for:
 """
 
 import asyncio
-from typing import Any, Dict, List
+from typing import Any, Dict
 
 import dns.resolver
 import dns.exception

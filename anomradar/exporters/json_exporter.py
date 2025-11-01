@@ -4,7 +4,6 @@ JSON exporter using orjson for high-performance serialization.
 Exports scan results to JSON format with pretty printing and metadata.
 """
 
-import json
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List

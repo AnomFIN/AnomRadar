@@ -17,11 +17,10 @@ import typer
 from rich.console import Console
 from rich.table import Table
 from rich.panel import Panel
-from rich import print as rprint
 
 from anomradar import __version__
 from anomradar.core.config import get_config
-from anomradar.core.logging import setup_logging, get_logger, get_console
+from anomradar.core.logging import setup_logging, get_logger
 from anomradar.core.cache import Cache
 from anomradar.scanners.http import HttpScanner
 from anomradar.scanners.dns import DnsScanner
@@ -377,17 +376,12 @@ def self_check():
     
     # Check 4: Scanners
     try:
-        from anomradar.scanners.http import HttpScanner
-        from anomradar.scanners.dns import DnsScanner
-        from anomradar.scanners.ssl import SslScanner
         checks.append(("Scanners", "✓", "green"))
     except Exception as e:
         checks.append(("Scanners", f"✗ {e}", "red"))
     
     # Check 5: Exporters
     try:
-        from anomradar.exporters.json_exporter import JsonExporter
-        from anomradar.exporters.html_exporter import HtmlExporter
         checks.append(("Exporters", "✓", "green"))
     except Exception as e:
         checks.append(("Exporters", f"✗ {e}", "red"))

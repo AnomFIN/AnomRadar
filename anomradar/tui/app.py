@@ -9,7 +9,7 @@ import asyncio
 from datetime import datetime
 
 from textual.app import App, ComposeResult
-from textual.containers import Container, Horizontal, Vertical
+from textual.containers import Container, Horizontal
 from textual.widgets import Header, Footer, Button, Input, Static, Log
 from textual.binding import Binding
 

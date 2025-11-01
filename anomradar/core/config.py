@@ -9,7 +9,6 @@ Implements layered configuration using:
 Uses pydantic for validation and BaseSettings for env integration.
 """
 
-import os
 from pathlib import Path
 from typing import List, Optional
 

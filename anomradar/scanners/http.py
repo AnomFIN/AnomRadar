@@ -9,9 +9,7 @@ Scans HTTP/HTTPS endpoints for:
 - Response time
 """
 
-import asyncio
 from typing import Any, Dict
-from urllib.parse import urlparse
 
 import httpx
 

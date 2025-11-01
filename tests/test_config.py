@@ -8,7 +8,6 @@ import os
 import tempfile
 from pathlib import Path
 
-import pytest
 import toml
 
 from anomradar.core.config import (
