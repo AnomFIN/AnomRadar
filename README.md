@@ -4,6 +4,39 @@
 
 AnomRadar is a comprehensive OSINT (Open Source Intelligence) security scanning and reporting system designed to identify and report company security flaws to management. The system performs passive reconnaissance, security analysis, and risk scoring to help organizations understand their security posture.
 
+## 🆕 AnomRadar v2 - New Python CLI/TUI Toolkit
+
+**AnomRadar v2 is a production-ready standalone CLI/TUI scanner toolkit with resilient architecture, intelligent caching, and brand-grade reporting.**
+
+### Quick Start with v2
+
+```bash
+# Install AnomRadar v2
+python scripts/asennus.py
+
+# Run your first scan
+anomradar scan example.com
+
+# Launch interactive TUI
+anomradar tui
+
+# Generate HTML report
+anomradar scan example.com --format html
+```
+
+### AnomRadar v2 Features
+- 🚀 **One-Command Install**: Interactive wizard with automatic setup
+- ⚡ **Fast CLI Interface**: Typer-based commands with rich output
+- 📺 **Reactive TUI**: Textual-based terminal UI for interactive scanning
+- 🔍 **Three Scanner Modules**: HTTP, DNS, and SSL/TLS analysis
+- 💾 **Intelligent Caching**: File-based cache with configurable TTL
+- 📊 **Brand-Grade Reports**: Professional HTML and JSON exports
+- 🛡️ **Production-Ready**: Global exception handling, graceful degradation
+- ✅ **Comprehensive Testing**: Pytest suite with GitHub Actions CI
+- 🎨 **Beautiful Output**: Rich console formatting and colors
+
+See [CHANGELOG.md](CHANGELOG.md) for complete v2 feature list.
+
 ## ⚠️ Important Notice
 
 **AnomRadar performs only PASSIVE security scanning. No active attacks or intrusive testing are performed.**
@@ -50,15 +83,66 @@ AnomRadar is a comprehensive OSINT (Open Source Intelligence) security scanning 
 
 ```
 AnomRadar (Monorepo)
-├── backend/           # Node.js + TypeScript scanner
-├── api/              # PHP REST API
-├── frontend/         # Static HTML/CSS/JS interface
-└── installer/        # Installation scripts
+├── anomradar/         # 🆕 v2: Python CLI/TUI toolkit
+│   ├── core/         # Configuration, caching, logging
+│   ├── scanners/     # HTTP, DNS, SSL scanners
+│   ├── exporters/    # JSON and HTML exporters
+│   └── tui/          # Interactive terminal UI
+├── backend/          # v1: Node.js + TypeScript scanner service
+├── api/              # v1: PHP REST API
+├── frontend/         # v1: Static HTML/CSS/JS interface
+├── scripts/          # Installation scripts (asennus.py)
+└── tests/            # Pytest test suite
 ```
 
 ## Quick Start
 
-### Prerequisites
+### AnomRadar v2 (Python CLI/TUI)
+
+**Prerequisites:**
+- Python 3.8 or higher
+- Internet connection
+
+**Installation:**
+```bash
+# Clone repository
+git clone https://github.com/AnomFIN/AnomRadar.git
+cd AnomRadar
+
+# Run interactive installer
+python scripts/asennus.py
+
+# Or manual setup
+python -m venv .venv
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+**Usage:**
+```bash
+# Scan a domain
+anomradar scan example.com
+
+# Scan with specific scanners
+anomradar scan example.com --scanner http --scanner dns
+
+# Generate HTML report
+anomradar scan example.com --format html --output report.html
+
+# Launch interactive TUI
+anomradar tui
+
+# Run diagnostics
+anomradar self-check
+anomradar doctor
+
+# Get help
+anomradar --help
+```
+
+### AnomRadar v1 (Full Stack Service)
+
+**Prerequisites:**
 - Linux-based system (**Ubuntu, Debian, Kali Linux, CentOS, RHEL, Fedora**)
 - Node.js 18+ (LTS)
 - PHP 8.1+

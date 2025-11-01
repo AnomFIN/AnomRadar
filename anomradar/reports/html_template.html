@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnomRadar Security Scan Report - {{ target }}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+        
+        .header .target {
+            font-size: 1.5em;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+        
+        .header .timestamp {
+            opacity: 0.8;
+            font-size: 0.9em;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+        }
+        
+        .section h2 {
+            color: #667eea;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        
+        .scan-result {
+            background: #f9f9f9;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        
+        .scan-result h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        
+        .status-success {
+            background: #10b981;
+            color: white;
+        }
+        
+        .status-partial {
+            background: #f59e0b;
+            color: white;
+        }
+        
+        .status-failed {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .summary {
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            color: #555;
+        }
+        
+        .signals {
+            margin-top: 20px;
+        }
+        
+        .signal {
+            background: white;
+            border: 1px solid #e5e5e5;
+            border-radius: 4px;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-left: 4px solid;
+        }
+        
+        .signal-critical {
+            border-left-color: #dc2626;
+        }
+        
+        .signal-high {
+            border-left-color: #ea580c;
+        }
+        
+        .signal-medium {
+            border-left-color: #f59e0b;
+        }
+        
+        .signal-low {
+            border-left-color: #3b82f6;
+        }
+        
+        .signal-info {
+            border-left-color: #6b7280;
+        }
+        
+        .signal-severity {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 3px;
+            font-size: 0.8em;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        
+        .severity-critical {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        
+        .severity-high {
+            background: #ffedd5;
+            color: #ea580c;
+        }
+        
+        .severity-medium {
+            background: #fef3c7;
+            color: #d97706;
+        }
+        
+        .severity-low {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+        
+        .severity-info {
+            background: #f3f4f6;
+            color: #4b5563;
+        }
+        
+        .signal-message {
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        
+        .signal-details {
+            font-size: 0.9em;
+            color: #666;
+            background: #f9fafb;
+            padding: 10px;
+            border-radius: 3px;
+            margin-top: 10px;
+        }
+        
+        .footer {
+            background: #f9fafb;
+            padding: 20px 40px;
+            text-align: center;
+            border-top: 1px solid #e5e5e5;
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .branding {
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .container {
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔒 AnomRadar Security Report</h1>
+            <div class="target">{{ target }}</div>
+            <div class="timestamp">Generated: {{ timestamp }}</div>
+        </div>
+        
+        <div class="content">
+            {% for scanner_name, result in results.items() %}
+            <div class="section">
+                <h2>{{ scanner_name|title }} Scanner</h2>
+                <div class="scan-result">
+                    <h3>Scan Status</h3>
+                    <span class="status status-{{ result.status }}">
+                        {{ result.status|upper }}
+                    </span>
+                    <div class="summary">{{ result.summary }}</div>
+                    
+                    {% if result.signals %}
+                    <div class="signals">
+                        <h4 style="margin-bottom: 15px; color: #555;">Findings ({{ result.signals|length }})</h4>
+                        {% for signal in result.signals %}
+                        <div class="signal signal-{{ signal.severity }}">
+                            <span class="signal-severity severity-{{ signal.severity }}">
+                                {{ signal.severity }}
+                            </span>
+                            <div class="signal-message">{{ signal.message }}</div>
+                            {% if signal.details %}
+                            <div class="signal-details">
+                                {% for key, value in signal.details.items() %}
+                                <div><strong>{{ key }}:</strong> {{ value }}</div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p style="color: #888; font-style: italic;">No findings to report.</p>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="footer">
+            <p>Report generated by <span class="branding">AnomRadar v2</span></p>
+            <p>Passive security reconnaissance tool — <a href="https://github.com/AnomFIN/AnomRadar" style="color: #667eea;">github.com/AnomFIN/AnomRadar</a></p>
+        </div>
+    </div>
+</body>
+</html>
