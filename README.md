@@ -1,350 +1,297 @@
-# AnomRadar
+# AnomRadar v2
 
-🔒 **Security Intelligence Platform for Company Security Assessment**
+🔒 **Production-Ready CLI/TUI Security Scanner Toolkit**
 
-AnomRadar is a comprehensive OSINT (Open Source Intelligence) security scanning and reporting system designed to identify and report company security flaws to management. The system performs passive reconnaissance, security analysis, and risk scoring to help organizations understand their security posture.
+AnomRadar v2 is a resilient Python-based security scanning toolkit with graceful error handling, structured output, and professional reporting. Built for security professionals who need reliable, reproducible scans.
 
 ## ⚠️ Important Notice
 
 **AnomRadar performs only PASSIVE security scanning. No active attacks or intrusive testing are performed.**
 
-- ✅ Passive DNS/SPF/DMARC analysis
-- ✅ Public information gathering (YTJ registry, websites)
-- ✅ Port/service discovery (read-only)
-- ✅ OWASP ZAP passive scanning only
+- ✅ Passive HTTP/HTTPS analysis
+- ✅ DNS record enumeration
+- ✅ SSL/TLS certificate validation
+- ✅ Public information gathering
 - ❌ NO active vulnerability exploitation
 - ❌ NO penetration testing
 - ❌ NO brute force attacks
 
 ## Features
 
-### Backend Scanner (Node.js + TypeScript) - 12 Scanners
-1. **YTJ Integration**: Finnish Business Registry lookups
-2. **Domain Discovery**: Automatic domain identification
-3. **DNS Analysis**: DNS records and security checks
-4. **Email Security**: SPF/DMARC/DKIM validation
-5. **ZAP Passive Scanning**: OWASP ZAP integration (passive mode only)
-6. **Network Scanning**: Nmap port and service discovery
-7. **Contact Scraping**: Automated contact information collection
-8. **🆕 SSL/TLS Scanner**: Certificate validation, expiration, weak ciphers
-9. **🆕 WHOIS Scanner**: Domain registration, expiration, privacy checks
-10. **🆕 Social Media**: Presence detection on 7+ platforms
-11. **🆕 Technology Stack**: CMS, frameworks, security headers detection
-12. **Risk Scoring**: Algorithmic risk assessment (0-100 scale)
+### 🎯 Core Capabilities
 
-### PHP REST API
-- **MySQL 8.0 Database**: Persistent storage for scan results
-- **RESTful Endpoints**: Complete CRUD operations
-- **Report Generation**: HTML and PDF reports
-- **Automatic Data Purge**: 90-day retention policy
-- **Whitelist Management**: Notification control (Telegram/WhatsApp)
+- **Typer CLI**: 5 powerful commands (scan, tui, report, self-check, doctor)
+- **Textual TUI**: Interactive terminal interface
+- **3 Resilient Scanners**: HTTP, DNS, SSL/TLS with graceful degradation
+- **Smart Caching**: TTL-based file cache in ~/.anomradar/cache
+- **Multiple Export Formats**: JSON (orjson) and HTML (Jinja2) reports
+- **Global Exception Handler**: Errors logged to ~/.anomradar/last_error.json
+- **Flexible Configuration**: Merge .env and anomradar.toml settings
 
-### Static Frontend
-- **Search Interface**: Initiate company security scans
-- **Reconnaissance Dashboard**: View active scans and results
-- **Whitelist Manager**: Configure notification recipients
-- **Report Viewer**: Generate and download reports
-- **Responsive Design**: Works on desktop and mobile
+### 🔍 Scanners
 
-## Architecture
+1. **HTTP Scanner**
+   - Status codes and response times
+   - Security headers analysis (HSTS, CSP, X-Frame-Options, etc.)
+   - Redirect chain tracking
+   - Server fingerprinting
 
-```
-AnomRadar (Monorepo)
-├── backend/           # Node.js + TypeScript scanner
-├── api/              # PHP REST API
-├── frontend/         # Static HTML/CSS/JS interface
-└── installer/        # Installation scripts
-```
+2. **DNS Scanner**
+   - A, AAAA, MX, TXT, NS, SOA, CNAME records
+   - Multiple nameserver support
+   - Graceful degradation on timeout/errors
+
+3. **SSL/TLS Scanner**
+   - Certificate validation and expiry
+   - Cipher suite analysis
+   - Subject Alternative Names (SAN)
+   - Chain verification
+
+### 📊 Reporting
+
+- **JSON Export**: Fast serialization with orjson, pretty-printing
+- **HTML Reports**: Professional, responsive templates with Jinja2
+- **Fallback Templates**: Works even without dependencies
+- **Structured Data**: Consistent format across all scanners
+
+### 🖥️ TUI (Terminal User Interface)
+
+- Modern, interactive interface powered by Textual
+- Real-time scan execution
+- Formatted results display
+- Safe exception handling
+- Keyboard shortcuts (q=quit, c=clear, Enter=scan)
 
 ## Quick Start
 
 ### Prerequisites
-- Linux-based system (**Ubuntu, Debian, Kali Linux, CentOS, RHEL, Fedora**)
-- Node.js 18+ (LTS)
-- PHP 8.1+
-- MySQL 8.0+
-- Composer
-- nmap, dig, whois utilities
 
-### Super Easy Installation
+- Python 3.8 or higher
+- pip (Python package manager)
 
-**See [HOWTO.md](HOWTO.md) for detailed step-by-step guide with screenshots and troubleshooting!**
+### Installation
 
-**Quick Install (5 minutes):**
+**One-command install (Linux/macOS):**
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/AnomFIN/AnomRadar.git
-   cd AnomRadar
-   ```
-
-2. **Run the installer:**
-   ```bash
-   sudo chmod +x installer/install.sh
-   sudo installer/install.sh
-   ```
-
-3. **Configure:**
-   - Edit `backend/.env` for scanner settings
-   - Edit `api/.env` for API configuration
-   - Set `SIMULATION_MODE=false` for real scans (default is already false)
-
-4. **Start services:**
-   ```bash
-   # Backend
-   cd backend && npm start
-
-   # Configure web server for API and frontend
-   # See installer/README.md for web server configuration
-   ```
-
-For detailed installation instructions, see [installer/README.md](installer/README.md)
-
-## Deployment to anomfin.fi
-
-**AnomRadar can be deployed to your web server (anomfin.fi) via FTP with remote MySQL!**
-
-### FTP Deployment Features
-- 🌐 Deploy PHP API and Frontend to anomfin.fi
-- 🗄️ Connect to remote MySQL database
-- 📁 Automatic backup before deployment
-- 🔒 Secure FTP/FTPS support
-- 🚀 One-command deployment
-
-**Quick Deployment:**
 ```bash
-# 1. Configure FTP credentials
-cd deployment
-cp .env.ftp.example .env.ftp
-nano .env.ftp
+# Clone repository
+git clone https://github.com/AnomFIN/AnomRadar.git
+cd AnomRadar
 
-# 2. Set up MySQL database (via cPanel or SSH)
-./setup-mysql.sh
-
-# 3. Deploy to anomfin.fi
-./deploy-ftp.sh
+# Run interactive installer
+python3 scripts/asennus.py
 ```
 
-**After deployment:**
-- Frontend: https://anomfin.fi/radar-ui
-- API: https://anomfin.fi/api/radar
+**Windows:**
 
-For complete deployment guide, see **[DEPLOYMENT.md](DEPLOYMENT.md)**
+```cmd
+REM Clone repository
+git clone https://github.com/AnomFIN/AnomRadar.git
+cd AnomRadar
 
-## Configuration
-
-### Backend Configuration (backend/.env)
-```bash
-# Database
-DB_HOST=localhost
-DB_NAME=anomradar
-DB_USER=anomradar
-DB_PASSWORD=your_secure_password
-
-# API Keys
-YTJ_API_KEY=your_ytj_api_key
-ZAP_API_KEY=your_zap_api_key
-
-# Scanner Settings
-SIMULATION_MODE=false  # OFF by default - real scans
-SCAN_TIMEOUT=300000
-MAX_CONCURRENT_SCANS=3
-
-# Notifications (Whitelist Only)
-NOTIFICATIONS_ENABLED=false
-TELEGRAM_BOT_TOKEN=your_token
-WHATSAPP_API_KEY=your_key
+REM Run interactive installer
+scripts\asennus.bat
 ```
 
-### API Configuration (api/.env)
+**Manual installation:**
+
 ```bash
-# Database
-DB_HOST=localhost
-DB_NAME=anomradar
-DB_USER=anomradar
-DB_PASSWORD=your_secure_password
+# Install dependencies
+pip install -r requirements.txt
 
-# Data Retention
-DATA_RETENTION_DAYS=90
+# Create config files (optional)
+cp .env.example .env
+cp anomradar.toml.example anomradar.toml
 
-# Reports
-REPORT_OUTPUT_PATH=/var/www/anomradar/api/reports/generated
-
-# Notifications (Whitelist Only)
-NOTIFICATIONS_ENABLED=false
+# Run self-check
+python -m anomradar.cli self-check
 ```
 
 ## Usage
 
-### Web Interface
-
-1. Open the frontend in your browser: `http://your-server/`
-2. **Search Tab**: Enter company name to start a scan
-3. **Reconnaissance Tab**: View active and completed scans
-4. **Whitelist Tab**: Manage notification recipients
-5. **Reports Tab**: Generate and download reports
-
-### API Endpoints
+### CLI Commands
 
 ```bash
-# Scans
-GET    /api/scans              # List all scans
-GET    /api/scans/{id}         # Get scan details
-POST   /api/scans              # Start new scan
-DELETE /api/scans/{id}         # Delete scan
+# Run a scan
+anomradar scan example.com
 
-# Reports
-GET    /api/reports/{scanId}                # List reports for scan
-POST   /api/reports/{scanId}/html           # Generate HTML report
-POST   /api/reports/{scanId}/pdf            # Generate PDF report
-GET    /api/reports/{scanId}/download/{id}  # Download report
+# Run specific scanners
+anomradar scan example.com --scanner http --scanner dns
 
-# Whitelist
-GET    /api/whitelist          # List whitelist
-POST   /api/whitelist          # Add to whitelist
-DELETE /api/whitelist/{id}     # Remove from whitelist
+# Save results to file
+anomradar scan example.com -o results.json
 
-# Maintenance
-POST   /api/maintenance/purge  # Manual data purge (90+ days)
+# Launch interactive TUI
+anomradar tui
+
+# Generate HTML report from scan results
+anomradar report results.json -o report.html
+
+# Run self-diagnostics
+anomradar self-check
+
+# Check for common issues
+anomradar doctor
+
+# Show version
+anomradar version
+
+# Get help
+anomradar --help
 ```
 
-## Risk Scoring
+### Python API
 
-AnomRadar calculates a risk score (0-100) based on findings:
+```python
+from anomradar.core.config import Config
+from anomradar.scanners import run_scan
 
-- **0-19**: Low risk (info)
-- **20-39**: Low risk
-- **40-69**: Medium risk
-- **70-100**: High risk
+# Load configuration
+config = Config.load()
 
-Severity weights:
-- Critical: 25 points
-- High: 15 points
-- Medium: 8 points
-- Low: 3 points
-- Info: 0 points
+# Run all scanners
+results = run_scan("example.com", config=config)
 
-## Security & Privacy
+# Run specific scanner
+from anomradar.scanners.http import scan_http
+result = scan_http("example.com", config)
 
-### Data Protection
-- All scan data stored in MySQL with 90-day auto-purge
-- No sensitive credentials stored in code
-- Environment variables for all secrets
-- API key authentication required
+# Export results
+from anomradar.exporters.json_exporter import export_json
+from pathlib import Path
+export_json(results, Path("results.json"))
+```
 
-### Notification Whitelist
-- Telegram/WhatsApp messages ONLY sent to whitelisted contacts
-- No simulation messages (SIMULATION_MODE=false by default)
-- Explicit opt-in required for notifications
+## Configuration
 
-### Passive Scanning
-- No active attacks or exploits
-- Read-only operations
-- Respects robots.txt (where applicable)
-- Minimal network impact
+### Environment Variables (.env)
 
-## Development
-
-### Backend Development
 ```bash
-cd backend
-npm install
-npm run dev        # Development mode with hot reload
-npm run build      # Compile TypeScript
-npm run lint       # Run ESLint
-npm test          # Run tests
+# Application Settings
+ANOMRADAR_ENV=production
+ANOMRADAR_LOG_LEVEL=INFO
+
+# Scanner Settings
+ANOMRADAR_TIMEOUT=30
+ANOMRADAR_MAX_RETRIES=3
+
+# Cache Settings
+ANOMRADAR_CACHE_TTL=3600
+ANOMRADAR_CACHE_ENABLED=true
 ```
 
-### Frontend Development
-The frontend is static HTML/CSS/JS. Simply edit files and refresh browser.
+### TOML Configuration (anomradar.toml)
 
-## Dependencies (Pinned Versions)
+```toml
+[application]
+name = "AnomRadar"
+version = "2.0.0"
+environment = "production"
 
-All dependencies use exact versions for reproducibility:
+[logging]
+level = "INFO"
+format = "json"
+output = "~/.anomradar/logs/anomradar.log"
 
-### Backend (Node.js)
-- axios: 1.6.0
-- dotenv: 16.3.1
-- winston: 3.11.0
-- typescript: 5.2.2
+[cache]
+enabled = true
+ttl = 3600
+directory = "~/.anomradar/cache"
 
-### API (PHP)
-- vlucas/phpdotenv: 5.5.0
-- tecnickcom/tcpdf: 6.6.5
+[scanners]
+timeout = 30
+max_retries = 3
+user_agent = "AnomRadar/2.0 Security Scanner"
+```
 
-See `backend/package.json` and `api/composer.json` for complete lists.
+Configuration priority (highest to lowest):
+1. Environment variables (ANOMRADAR_*)
+2. TOML file settings
+3. .env file settings
+4. Default values
 
 ## Project Structure
 
 ```
 AnomRadar/
-├── PROJECT_PLAN.md              # Complete architecture documentation
-├── README.md                    # This file
-├── .gitignore                   # Git ignore rules
-├── backend/                     # Node.js + TypeScript scanner
-│   ├── src/
-│   │   ├── index.ts            # Main entry point
-│   │   ├── config/             # Configuration management
-│   │   ├── scanners/           # Individual scanners
-│   │   ├── risk-scoring/       # Risk calculation
-│   │   └── utils/              # Utilities (logging, etc.)
-│   ├── package.json            # Node.js dependencies
-│   ├── tsconfig.json           # TypeScript configuration
-│   └── .env.example            # Environment template
-├── api/                        # PHP REST API
-│   ├── public/
-│   │   └── index.php          # API entry point
-│   ├── src/
-│   │   ├── Database/          # Database connection
-│   │   ├── Controllers/       # API controllers
-│   │   ├── Reports/           # Report generators
-│   │   └── Utils/             # Utilities
-│   ├── migrations/            # Database migrations
-│   ├── composer.json          # PHP dependencies
-│   └── .env.example           # Environment template
-├── frontend/                   # Static web interface
-│   ├── index.html             # Main page
-│   ├── css/
-│   │   └── styles.css         # Styles
-│   └── js/
-│       ├── app.js             # Main application
-│       ├── search.js          # Search functionality
-│       ├── whitelist.js       # Whitelist management
-│       └── reports.js         # Reports management
-└── installer/                  # Installation tools
-    ├── install.sh             # Main installer
-    ├── config.template.json   # Config template
-    └── README.md              # Installation guide
+├── anomradar/              # Main package
+│   ├── cli.py             # Typer CLI with 5 commands
+│   ├── core/              # Core functionality
+│   ├── scanners/          # Scanner modules
+│   ├── exporters/         # Export functionality
+│   ├── reports/           # Report templates
+│   └── tui/               # Terminal UI
+├── scripts/               # Installation scripts
+├── tests/                 # Test suite
+├── assets/brand/          # Brand assets
+├── .github/workflows/     # CI/CD
+├── requirements.txt       # Dependencies
+├── .env.example          # Environment template
+├── anomradar.toml.example # Config template
+└── CHANGELOG.md          # Version history
 ```
 
-## Contributing
+## Development
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Run tests and linting
-5. Submit a pull request
+### Running Tests
+
+```bash
+# Install test dependencies
+pip install pytest pytest-cov
+
+# Run all tests
+pytest tests/ -v
+
+# Run with coverage
+pytest tests/ --cov=anomradar
+```
+
+### Linting
+
+```bash
+# Install ruff
+pip install ruff
+
+# Run linter
+ruff check anomradar/ tests/ scripts/
+```
+
+## Error Handling
+
+AnomRadar v2 features comprehensive error handling:
+
+- **Global Exception Handler**: All CLI commands wrapped with error handler
+- **Scanner Degradation**: Scanners return structured errors instead of crashing
+- **Error Logging**: Errors written to ~/.anomradar/last_error.json
+- **User-Friendly Messages**: Clear error messages in console
+
+## Security & Privacy
+
+### Data Protection
+- All scan data stored locally in ~/.anomradar/
+- No external data transmission (except for scans)
+- No telemetry or analytics
+
+### Passive Scanning
+- Read-only operations
+- No exploits or attacks
+- Respects target systems
+
+### Responsible Use
+This tool is for **authorized security assessment only**. Users must:
+- Obtain proper authorization before scanning
+- Comply with applicable laws and regulations
+- Use the tool ethically and responsibly
 
 ## License
 
 MIT License - see LICENSE file for details
 
-## Disclaimer
-
-This tool is for **authorized security assessment only**. Users are responsible for:
-- Obtaining proper authorization before scanning
-- Complying with applicable laws and regulations
-- Using the tool ethically and responsibly
-- Not using for malicious purposes
-
-The authors are not responsible for misuse of this tool.
-
 ## Support
 
-- **Documentation**: See [PROJECT_PLAN.md](PROJECT_PLAN.md) for detailed architecture
-- **Installation Help**: See [installer/README.md](installer/README.md)
 - **Issues**: https://github.com/AnomFIN/AnomRadar/issues
+- **Discussions**: https://github.com/AnomFIN/AnomRadar/discussions
 
 ---
 
-**Built with security and privacy in mind. Always scan responsibly. 🔒**
+**AnomRadar v2 - Built with security and privacy in mind. Always scan responsibly. 🔒**

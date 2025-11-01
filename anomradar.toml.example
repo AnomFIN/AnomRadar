@@ -1,0 +1,48 @@
+# AnomRadar Configuration File Example
+# Copy to anomradar.toml and customize
+
+[application]
+name = "AnomRadar"
+version = "2.0.0"
+environment = "production"
+
+[logging]
+level = "INFO"
+format = "json"
+output = "~/.anomradar/logs/anomradar.log"
+
+[cache]
+enabled = true
+ttl = 3600  # seconds
+directory = "~/.anomradar/cache"
+max_size_mb = 100
+
+[scanners]
+timeout = 30
+max_retries = 3
+user_agent = "AnomRadar/2.0 Security Scanner"
+
+[scanners.http]
+enabled = true
+follow_redirects = true
+verify_ssl = true
+max_redirects = 5
+
+[scanners.dns]
+enabled = true
+nameservers = ["8.8.8.8", "1.1.1.1"]
+types = ["A", "AAAA", "MX", "TXT", "NS", "SOA"]
+
+[scanners.ssl]
+enabled = true
+check_expiry = true
+check_chain = true
+check_ciphers = true
+
+[export]
+default_format = "json"
+pretty_print = true
+
+[tui]
+refresh_rate = 1.0
+theme = "dark"

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnomRadar Scan Report - {{ target }}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+        }
+        .header h1 { font-size: 2.5em; margin-bottom: 10px; }
+        .header .meta { opacity: 0.9; }
+        .content { padding: 40px; }
+        .scanner-section {
+            margin-bottom: 40px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .scanner-header {
+            background: #f8f9fa;
+            padding: 15px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .scanner-header h2 {
+            font-size: 1.5em;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .status-badge {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        .status-success { background: #d4edda; color: #155724; }
+        .status-error { background: #f8d7da; color: #721c24; }
+        .scanner-body { padding: 20px; }
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .data-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+        }
+        .data-item label {
+            font-weight: 600;
+            color: #666;
+            font-size: 0.9em;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .data-item .value {
+            color: #333;
+            word-break: break-word;
+        }
+        .data-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        .data-list li {
+            padding: 8px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .data-list li:last-child { border-bottom: none; }
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .error-message {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            color: #721c24;
+        }
+        .footer {
+            background: #f8f9fa;
+            padding: 20px 40px;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔒 AnomRadar Security Scan Report</h1>
+            <div class="meta">
+                <p><strong>Target:</strong> {{ target }}</p>
+                <p><strong>Generated:</strong> {{ timestamp }}</p>
+            </div>
+        </div>
+
+        <div class="content">
+            {% for scanner_name, scanner_data in results.items() %}
+            <div class="scanner-section">
+                <div class="scanner-header">
+                    <h2>
+                        {% if scanner_name == 'http' %}🌐{% elif scanner_name == 'dns' %}🔍{% elif scanner_name == 'ssl' %}🔒{% endif %}
+                        {{ scanner_name.upper() }} Scanner
+                    </h2>
+                    {% if scanner_data.success %}
+                    <span class="status-badge status-success">✓ Success</span>
+                    {% else %}
+                    <span class="status-badge status-error">✗ Failed</span>
+                    {% endif %}
+                </div>
+                <div class="scanner-body">
+                    <p><strong>Message:</strong> {{ scanner_data.message }}</p>
+                    
+                    {% if scanner_data.warning %}
+                    <div class="warning">
+                        <strong>⚠️ Warning:</strong> {{ scanner_data.warning }}
+                    </div>
+                    {% endif %}
+                    
+                    {% if not scanner_data.success and scanner_data.error %}
+                    <div class="error-message">
+                        <strong>Error:</strong> {{ scanner_data.error }}
+                    </div>
+                    {% endif %}
+                    
+                    {% if scanner_data.data %}
+                    <div class="data-grid">
+                        {% for key, value in scanner_data.data.items() %}
+                        <div class="data-item">
+                            <label>{{ key.replace('_', ' ').title() }}:</label>
+                            <div class="value">
+                                {% if value is mapping %}
+                                    <ul class="data-list">
+                                    {% for k, v in value.items() %}
+                                        <li><strong>{{ k }}:</strong> {{ v }}</li>
+                                    {% endfor %}
+                                    </ul>
+                                {% elif value is iterable and value is not string %}
+                                    <ul class="data-list">
+                                    {% for item in value %}
+                                        <li>{{ item }}</li>
+                                    {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <code>{{ value }}</code>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="footer">
+            <p>Generated by AnomRadar v2.0 - Professional Security Scanner Toolkit</p>
+            <p>⚠️ This scan performs passive reconnaissance only. No active attacks are performed.</p>
+        </div>
+    </div>
+</body>
+</html>

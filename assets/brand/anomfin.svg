@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="100" cy="100" r="95" fill="url(#grad)" opacity="0.1"/>
+  
+  <!-- Radar circles -->
+  <circle cx="100" cy="100" r="70" fill="none" stroke="url(#grad)" stroke-width="2" opacity="0.3"/>
+  <circle cx="100" cy="100" r="50" fill="none" stroke="url(#grad)" stroke-width="2" opacity="0.5"/>
+  <circle cx="100" cy="100" r="30" fill="none" stroke="url(#grad)" stroke-width="2" opacity="0.7"/>
+  
+  <!-- Center dot -->
+  <circle cx="100" cy="100" r="8" fill="url(#grad)"/>
+  
+  <!-- Radar sweep line -->
+  <line x1="100" y1="100" x2="100" y2="30" stroke="url(#grad)" stroke-width="3" opacity="0.8">
+    <animateTransform
+      attributeName="transform"
+      type="rotate"
+      from="0 100 100"
+      to="360 100 100"
+      dur="3s"
+      repeatCount="indefinite"/>
+  </line>
+  
+  <!-- Shield outline -->
+  <path d="M100 20 L140 40 L140 80 Q140 110 100 130 Q60 110 60 80 L60 40 Z" 
+        fill="none" 
+        stroke="url(#grad)" 
+        stroke-width="3" 
+        opacity="0.6"/>
+  
+  <!-- Lock icon -->
+  <rect x="90" y="75" width="20" height="25" rx="2" fill="url(#grad)" opacity="0.8"/>
+  <path d="M85 75 L85 65 Q85 55 100 55 Q115 55 115 65 L115 75" 
+        fill="none" 
+        stroke="url(#grad)" 
+        stroke-width="3"/>
+  
+  <!-- Text -->
+  <text x="100" y="170" font-family="Arial, sans-serif" font-size="24" font-weight="bold" 
+        text-anchor="middle" fill="url(#grad)">AnomFIN</text>
+  <text x="100" y="188" font-family="Arial, sans-serif" font-size="12" 
+        text-anchor="middle" fill="#666">Security Scanner</text>
+</svg>
