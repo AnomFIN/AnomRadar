@@ -96,7 +96,7 @@ class FileCache:
                     'timestamp': entry.timestamp,
                     'ttl': entry.ttl
                 }, f)
-        except (OSError, TypeError) as e:
+        except (OSError, TypeError):
             # Silently fail if caching fails
             pass
     

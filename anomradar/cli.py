@@ -10,10 +10,10 @@ import traceback
 from pathlib import Path
 from typing import Optional, List
 from datetime import datetime
+from functools import wraps
 
 import typer
 from rich.console import Console
-from rich.table import Table
 
 from anomradar import __version__
 from anomradar.core.config import Config
@@ -58,13 +58,14 @@ def write_error_log(error: Exception, context: str = "") -> None:
 
 def global_exception_handler(func):
     """Decorator to handle exceptions globally and write to error log"""
+    @wraps(func)
     def wrapper(*args, **kwargs):
         try:
             return func(*args, **kwargs)
         except Exception as e:
             write_error_log(e, context=func.__name__)
             console.print(f"[red bold]Error:[/red bold] {str(e)}", file=sys.stderr)
-            console.print(f"[yellow]Error details written to ~/.anomradar/last_error.json[/yellow]")
+            console.print("[yellow]Error details written to ~/.anomradar/last_error.json[/yellow]")
             sys.exit(1)
     return wrapper
 
@@ -113,7 +114,7 @@ def scan(
     
     # Display results
     console.print(f"\n[green]Scan completed:[/green] {target}")
-    console.print(f"[cyan]Results:[/cyan]")
+    console.print("[cyan]Results:[/cyan]")
     
     for scanner_name, result in results.items():
         status = "[green]✓[/green]" if result.get("success") else "[red]✗[/red]"
@@ -271,22 +272,22 @@ def doctor() -> None:
     toml_file = Path("anomradar.toml")
     
     if env_file.exists():
-        console.print(f"[green]✓[/green] .env file found")
+        console.print("[green]✓[/green] .env file found")
     else:
-        console.print(f"[yellow]![/yellow] .env file not found (optional)")
-        console.print(f"    [dim]Create from: cp .env.example .env[/dim]")
+        console.print("[yellow]![/yellow] .env file not found (optional)")
+        console.print("    [dim]Create from: cp .env.example .env[/dim]")
     
     if toml_file.exists():
-        console.print(f"[green]✓[/green] anomradar.toml file found")
+        console.print("[green]✓[/green] anomradar.toml file found")
     else:
-        console.print(f"[yellow]![/yellow] anomradar.toml file not found (optional)")
-        console.print(f"    [dim]Create from: cp anomradar.toml.example anomradar.toml[/dim]")
+        console.print("[yellow]![/yellow] anomradar.toml file not found (optional)")
+        console.print("    [dim]Create from: cp anomradar.toml.example anomradar.toml[/dim]")
     
     # Check directories
     console.print("\n[cyan]Checking directories...[/cyan]")
     anomradar_dir = Path.home() / ".anomradar"
     if anomradar_dir.exists():
-        console.print(f"[green]✓[/green] ~/.anomradar directory exists")
+        console.print("[green]✓[/green] ~/.anomradar directory exists")
         
         # Check subdirectories
         cache_dir = anomradar_dir / "cache"
@@ -296,14 +297,14 @@ def doctor() -> None:
             cache_files = list(cache_dir.glob("*.json"))
             console.print(f"[green]✓[/green] Cache directory ({len(cache_files)} files)")
         else:
-            console.print(f"[yellow]![/yellow] Cache directory will be created on first use")
+            console.print("[yellow]![/yellow] Cache directory will be created on first use")
         
         if data_dir.exists():
-            console.print(f"[green]✓[/green] Data directory exists")
+            console.print("[green]✓[/green] Data directory exists")
         else:
-            console.print(f"[yellow]![/yellow] Data directory will be created on first use")
+            console.print("[yellow]![/yellow] Data directory will be created on first use")
     else:
-        console.print(f"[yellow]![/yellow] ~/.anomradar directory will be created on first use")
+        console.print("[yellow]![/yellow] ~/.anomradar directory will be created on first use")
     
     # Summary
     console.print()

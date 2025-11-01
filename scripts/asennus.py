@@ -7,7 +7,6 @@ Handles dependencies, configuration, and setup.
 """
 
 import sys
-import os
 import subprocess
 import shutil
 from pathlib import Path
@@ -77,9 +76,9 @@ def create_config_files():
     
     if env_example.exists() and not env_file.exists():
         shutil.copy(env_example, env_file)
-        print(f"✓ Created .env from .env.example")
+        print("✓ Created .env from .env.example")
     elif env_file.exists():
-        print(f"⚠️  .env already exists, skipping")
+        print("⚠️  .env already exists, skipping")
     
     # Create anomradar.toml if it doesn't exist
     toml_example = repo_root / "anomradar.toml.example"
@@ -87,9 +86,9 @@ def create_config_files():
     
     if toml_example.exists() and not toml_file.exists():
         shutil.copy(toml_example, toml_file)
-        print(f"✓ Created anomradar.toml from anomradar.toml.example")
+        print("✓ Created anomradar.toml from anomradar.toml.example")
     elif toml_file.exists():
-        print(f"⚠️  anomradar.toml already exists, skipping")
+        print("⚠️  anomradar.toml already exists, skipping")
     
     # Create directories
     anomradar_dir = Path.home() / ".anomradar"
