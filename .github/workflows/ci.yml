@@ -1,0 +1,148 @@
+name: AnomRadar v2 CI
+
+on:
+  push:
+    branches: [ main, develop, 'copilot/**' ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  lint-and-test:
+    name: Lint and Test
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        python-version: ['3.8', '3.9', '3.10', '3.11']
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    
+    - name: Cache pip packages
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Lint with ruff
+      run: |
+        ruff check anomradar/ tests/ --output-format=github
+      continue-on-error: true
+    
+    - name: Run pytest
+      run: |
+        pytest tests/ -v --tb=short
+      env:
+        PYTHONPATH: ${{ github.workspace }}
+    
+    - name: Test CLI self-check
+      run: |
+        python -m anomradar.cli self-check
+      continue-on-error: true
+
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install safety
+    
+    - name: Run safety check
+      run: |
+        safety check --json || true
+      continue-on-error: true
+
+  build-test:
+    name: Build and Integration Test
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Test package import
+      run: |
+        python -c "import anomradar; print(f'AnomRadar v{anomradar.__version__}')"
+    
+    - name: Test CLI commands
+      run: |
+        python -m anomradar.cli --help
+        python -m anomradar.cli version
+        python -m anomradar.cli self-check
+    
+    - name: Test scan command (example.com)
+      run: |
+        python -m anomradar.cli scan example.com --format json --no-cache
+      continue-on-error: true
+    
+    - name: Upload test artifacts
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: test-reports
+        path: ~/.anomradar/reports/
+        retention-days: 7
+
+  installer-test:
+    name: Test Installer
+    runs-on: ${{ matrix.os }}
+    
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Test installer script (Unix)
+      if: runner.os != 'Windows'
+      run: |
+        python scripts/asennus.py || true
+      continue-on-error: true
+    
+    - name: Test installer script (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        python scripts/asennus.py
+      continue-on-error: true
+      shell: cmd

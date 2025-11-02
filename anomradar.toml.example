@@ -1,0 +1,41 @@
+# AnomRadar v2 Configuration (TOML)
+# Copy this to anomradar.toml and customize
+# Settings here override .env values
+
+[app]
+name = "AnomRadar"
+version = "2.0.0"
+debug = false
+
+[cache]
+enabled = true
+ttl = 3600
+directory = "~/.anomradar/cache"
+
+[scanners]
+timeout = 30
+max_retries = 2
+
+[scanners.http]
+user_agent = "AnomRadar/2.0 (Security Scanner)"
+follow_redirects = true
+timeout = 15
+
+[scanners.dns]
+nameservers = ["8.8.8.8", "1.1.1.1"]
+timeout = 10
+
+[scanners.ssl]
+verify_expiration = true
+check_weak_ciphers = true
+timeout = 20
+
+[reports]
+output_directory = "~/.anomradar/reports"
+template = "default"
+formats = ["json", "html"]
+
+[logging]
+level = "INFO"
+file = "~/.anomradar/logs/anomradar.log"
+console = true

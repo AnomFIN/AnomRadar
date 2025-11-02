@@ -1,0 +1,26 @@
+# AnomRadar v2 - Production Dependencies
+# Core CLI and configuration
+typer==0.9.0
+pydantic==2.5.0
+pydantic-settings==2.1.0
+python-dotenv==1.0.0
+toml==0.10.2
+
+# TUI and UI
+textual==0.44.1
+rich==13.7.0
+
+# Scanners
+httpx==0.25.2
+dnspython==2.4.2
+
+# Exporters and templating
+orjson==3.9.10
+jinja2==3.1.2
+
+# Testing
+pytest==7.4.3
+pytest-asyncio==0.21.1
+
+# Linting and formatting
+ruff==0.1.8
