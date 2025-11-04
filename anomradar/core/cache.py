@@ -39,9 +39,12 @@ class FileCache:
         self.cache_dir.mkdir(parents=True, exist_ok=True)
     
     def _get_cache_path(self, key: str) -> Path:
-        """Generate cache file path for a key"""
-        # Hash the key to create a safe filename
-        key_hash = hashlib.md5(key.encode()).hexdigest()
+        """Generate cache file path for a key
+        
+        Note: Uses blake2b for hashing cache keys to create safe filenames.
+        This is for filename safety only, not for security purposes.
+        """
+        key_hash = hashlib.blake2b(key.encode(), digest_size=16).hexdigest()
         return self.cache_dir / f"{key_hash}.json"
     
     def get(self, key: str) -> Optional[Any]:
