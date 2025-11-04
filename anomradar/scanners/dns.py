@@ -2,7 +2,7 @@
 
 import logging
 from typing import Dict, Any
-from datetime import datetime
+from datetime import datetime, timezone
 
 try:
     import dns.resolver
@@ -49,7 +49,7 @@ def scan_dns(target: str, config: Config) -> Dict[str, Any]:
             "success": False,
             "message": "dnspython library not available",
             "error": "missing_dependency",
-            "timestamp": datetime.utcnow().isoformat() + "Z",
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "target": target
         }
     
@@ -59,7 +59,7 @@ def scan_dns(target: str, config: Config) -> Dict[str, Any]:
     result = {
         "success": False,
         "message": "",
-        "timestamp": datetime.utcnow().isoformat() + "Z",
+        "timestamp": datetime.now(timezone.utc).isoformat(),
         "target": target,
         "data": {}
     }

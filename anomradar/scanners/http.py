@@ -1,8 +1,9 @@
 """HTTP scanner module with graceful degradation"""
 
 import logging
+import time
 from typing import Dict, Any
-from datetime import datetime
+from datetime import datetime, timezone
 
 try:
     import httpx
@@ -48,7 +49,7 @@ def scan_http(target: str, config: Config) -> Dict[str, Any]:
             "success": False,
             "message": "httpx library not available",
             "error": "missing_dependency",
-            "timestamp": datetime.utcnow().isoformat() + "Z",
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "target": target
         }
     
@@ -59,7 +60,7 @@ def scan_http(target: str, config: Config) -> Dict[str, Any]:
     result = {
         "success": False,
         "message": "",
-        "timestamp": datetime.utcnow().isoformat() + "Z",
+        "timestamp": datetime.now(timezone.utc).isoformat(),
         "target": target,
         "data": {}
     }
@@ -76,10 +77,10 @@ def scan_http(target: str, config: Config) -> Dict[str, Any]:
             follow_redirects=True,
             headers={"User-Agent": user_agent}
         ) as client:
-            start_time = datetime.now()
+            start_time = time.perf_counter()
             response = client.get(target)
-            end_time = datetime.now()
-            response_time_ms = (end_time - start_time).total_seconds() * 1000
+            end_time = time.perf_counter()
+            response_time_ms = (end_time - start_time) * 1000
         
         # Extract headers
         headers = dict(response.headers)

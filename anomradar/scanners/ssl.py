@@ -4,7 +4,7 @@ import logging
 import socket
 import ssl
 from typing import Dict, Any
-from datetime import datetime
+from datetime import datetime, timezone
 
 try:
     from cryptography import x509
@@ -55,7 +55,7 @@ def scan_ssl(target: str, config: Config) -> Dict[str, Any]:
     result = {
         "success": False,
         "message": "",
-        "timestamp": datetime.utcnow().isoformat() + "Z",
+        "timestamp": datetime.now(timezone.utc).isoformat(),
         "target": target,
         "data": {}
     }
@@ -101,7 +101,7 @@ def scan_ssl(target: str, config: Config) -> Dict[str, Any]:
                 not_after = cert.not_valid_after
                 
                 # Calculate days until expiry
-                now = datetime.utcnow()
+                now = datetime.now(timezone.utc).replace(tzinfo=None)
                 days_until_expiry = (not_after - now).days
                 is_expired = days_until_expiry < 0
                 

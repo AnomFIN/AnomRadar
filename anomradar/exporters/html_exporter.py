@@ -3,7 +3,7 @@
 import logging
 from pathlib import Path
 from typing import Any, Dict
-from datetime import datetime
+from datetime import datetime, timezone
 
 try:
     from jinja2 import Environment, FileSystemLoader, select_autoescape
@@ -55,7 +55,7 @@ def export_html(data: Dict[str, Any], output_path: Path) -> None:
         
         context = {
             "target": target,
-            "timestamp": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC"),
+            "timestamp": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC"),
             "results": data
         }
         
@@ -80,7 +80,7 @@ def _export_html_basic(data: Dict[str, Any], output_path: Path) -> None:
             target = scanner_data["target"]
             break
     
-    timestamp = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")
+    timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
     
     html = f"""<!DOCTYPE html>
 <html lang="en">

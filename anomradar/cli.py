@@ -9,7 +9,7 @@ import sys
 import traceback
 from pathlib import Path
 from typing import Optional, List
-from datetime import datetime
+from datetime import datetime, timezone
 from functools import wraps
 
 import typer
@@ -40,7 +40,7 @@ def write_error_log(error: Exception, context: str = "") -> None:
     error_file = error_dir / "last_error.json"
     
     error_data = {
-        "timestamp": datetime.utcnow().isoformat() + "Z",
+        "timestamp": datetime.now(timezone.utc).isoformat(),
         "version": __version__,
         "error_type": type(error).__name__,
         "error_message": str(error),

@@ -126,12 +126,21 @@ def run_self_check():
     print("\n🔍 Running self-check...")
     
     try:
-        # Import and run self-check
-        from anomradar.cli import self_check
-        self_check()
+        # Run self-check via CLI using subprocess
+        result = subprocess.run(
+            [sys.executable, "-m", "anomradar.cli", "self-check"],
+            check=True,
+            capture_output=True,
+            text=True
+        )
+        print(result.stdout)
         return True
-    except Exception as e:
+    except subprocess.CalledProcessError as e:
         print(f"⚠️  Self-check failed: {e}")
+        if e.stdout:
+            print(e.stdout)
+        if e.stderr:
+            print(e.stderr)
         return False
 
 
